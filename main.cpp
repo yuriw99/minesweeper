@@ -54,6 +54,10 @@ int initializeBoard(int numRows, int numCols, int startRow, int startColumn) {
 
 }
 
+void displayBoardHelper(int row, int col) {
+
+}
+
 void displayBoard(int row, int col, int numRows, int numCols) {
 	if (!board[row][col].isMine) {
 		board[row][col].display = '0' + board[row][col].numMines;
