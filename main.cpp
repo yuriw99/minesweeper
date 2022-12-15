@@ -8,6 +8,7 @@ using namespace std;
 struct Tile {
 	char display;
 	bool isMine;
+	bool visited;
 	int numMines;
 };
 
@@ -33,7 +34,7 @@ int initializeBoard(int numRows, int numCols, int startRow, int startColumn) {
 	for (int j = 0; j < numRows; j++) {
 		vector<Tile>row;
 		for (int i = 0; i < numCols; i++) {
-			row.push_back({ '-',false, 0 });
+			row.push_back({ '-',false, false, 0 });
 		}
 		board.push_back(row);
 	}
