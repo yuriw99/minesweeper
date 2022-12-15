@@ -54,23 +54,59 @@ int initializeBoard(int numRows, int numCols, int startRow, int startColumn) {
 
 }
 
-void displayBoardHelper(int row, int col) {
-
+int displayBoardHelper(int row, int col, int totRows, int totCols) {
+	int numZeroes = 0;
+	if (board[row][col].numMines > 0 || board[row][col].isMine) {
+		return 0; //base case
+	}
+	else if (row<0 || col<0 || row>=totRows || col>=totCols) {
+		return 0;
+	} //second base case, row col is invalid tile
+	else {
+		if (row > 0 && !board[row-1][col].visited) {
+			board[row - 1][col].display = '0' + board[row-1][col].numMines;
+			board[row - 1][col].visited = true;
+			numZeroes++;
+			numZeroes+=displayBoardHelper(row - 1, col, totRows, totCols);
+		}
+		if (row < (totRows - 1) && !board[row + 1][col].visited) {
+			board[row + 1][col].display = '0' + board[row+1][col].numMines;
+			board[row + 1][col].visited = true;
+			numZeroes++;
+			numZeroes+=displayBoardHelper(row + 1, col, totRows, totCols);
+		}
+		if (col > 0 && !board[row][col - 1].visited) {
+			board[row][col - 1].display = '0' + board[row][col-1].numMines;
+			board[row][col - 1].visited = true;
+			numZeroes++;
+			numZeroes+=displayBoardHelper(row, col - 1, totRows, totCols);
+		}
+		if (col < (totCols - 1) && !board[row][col + 1].visited) {
+			board[row][col + 1].display = '0' + board[row][col+1].numMines;
+			board[row][col + 1].visited = true;
+			numZeroes++;
+			numZeroes += displayBoardHelper(row, col + 1, totRows, totCols);
+		}
+	}
+	return numZeroes;
 }
 
-void displayBoard(int row, int col, int numRows, int numCols) {
+int displayBoard(int row, int col, int numRows, int numCols) {
 	if (!board[row][col].isMine) {
 		board[row][col].display = '0' + board[row][col].numMines;
 	}
 	else {
 		board[row][col].display = 'd';
 	}
+	board[row][col].visited = true;
+	int val=displayBoardHelper(row, col, numRows, numCols);
 	for (int i = 0; i < numRows; i++) {
 		for (int j = 0; j < numCols; j++) {
 			cout << board[i][j].display<<" ";
 		}
 		cout << "\n";
 	}
+	return ++val;
 }
 bool verifyValidBegin(int row, int col, int numRows, int numCols) {
 	bool valid = true;
@@ -118,8 +154,8 @@ int main(int argc, char* argv[]) {
 		cin >> startCol;
 	};
 	int mines=initializeBoard(numRows, numColumns, startRow, startCol);
-	displayBoard(startRow, startCol, numRows, numColumns);
-	int totTimes = numRows * numColumns - mines-1;
+	int init = displayBoard(startRow, startCol, numRows, numColumns);
+	int totTimes = numRows * numColumns - mines-1-init;
 	int i = 0;
 	while(i<totTimes) {
 		cout << "Please indicate your position by typing in {row column}" << "\n";
@@ -128,9 +164,9 @@ int main(int argc, char* argv[]) {
 		cin >> row;
 		cin >> column;
 		if (verifyValidColRow(row, column, numRows, numColumns)) {
-			displayBoard(row, column, numRows, numColumns);
+			i+=displayBoard(row, column, numRows, numColumns);
 			lost = checkMine(row, column);
-			i++;
+			
 		}
 		if (lost) {
 			cout << "You have hit a mine and exploded. Please try again" << "\n";
