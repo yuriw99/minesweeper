@@ -1,0 +1,178 @@
+﻿
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        .cell {
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            border: solid 1px black;
+            text-align: center;
+            display: table;
+            width: 30px;
+            height: 30px;
+        }
+
+            .cell span {
+                vertical-align: middle;
+                display: table-cell;
+            }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var first_click = true;
+        var width = 5;
+        var height = 5;
+        function initialize() {
+            var startTop = 100;
+            var startLeft = 100;
+            for (var i = 0; i < height; i++) {
+                for (var j = 0; j < width; j++) {
+                    var cell = $("<div id='"+i + "_" + j + "' class='cell'><span>-</span></div>");
+                    cell.css("left", startLeft + "px").css("top", startTop + "px");
+                    cell.attr("isMine", "false"); //sets the attribute isMine to 'false'
+                    cell.attr("numMines", "0");
+                    cell.attr("visited", "false");
+                    cell.appendTo("body");
+                    startLeft += 30;
+                }
+                startTop += 30;
+                startLeft = 100;
+            }
+
+            $("div").on("click", function () {
+                if (first_click) {
+                    updateBoardMines($(this));
+                    first_click = false;
+                }
+                
+                    
+                    if ($(this).attr("isMine") == "true") {
+                        //display a losing message
+                        gameOver($(this));
+                        alert("You stepped on a mine and exploded");
+                    }
+                    else {
+                        //display numMines
+                        $(this).children().text($(this).attr("numMines"));
+                        clickhelper($(this));
+                }
+
+                $(this).attr("visited", "true");
+                
+
+            });
+        }
+
+        
+
+        function clickhelper(obj) {
+            if (obj.attr("visited") == "true" || parseInt(obj.attr("numMines")) > 0) {
+                return;
+            }
+            else {
+                var id = obj.attr("id");
+                const array = id.split("_");
+                var row = parseInt(array[0]);
+                var col = parseInt(array[1]);
+                var leftid = row + "_" + (col - 1);
+                var leftCell = $("#" + leftid);
+                var rightid = row + "_" + (col + 1);
+                var rightCell = $("#" + rightid);
+                var upid = (row - 1) + "_" + col;
+                var upCell = $("#" + upid);
+                var downid = (row + 1) + "_" + col;
+                var downCell = $("#" + downid);
+                if (leftCell.length > 0) {
+                    (leftCell).children().text(leftCell.attr("numMines"));
+                    leftCell.attr("visited", "true");
+                    clickhelper(leftCell);
+                }
+                if (rightCell.length > 0) {
+                    rightCell.children().text(rightCell.attr("numMines"));
+                    rightCell.attr("visited", "true");
+                    clickhelper(rightCell);
+                }
+                if (upCell.length > 0) {
+                    upCell.children().text(upCell.attr("numMines"));
+                    upCell.attr("visited", "true");
+                    clickhelper(upCell);
+                }
+                if (downCell.length > 0) {
+                    downCell.children().text(downCell.attr("numMines"));
+                    downCell.attr("visited", "true");
+                    clickhelper(downCell);
+                }
+
+
+
+            }
+
+        }
+
+        function gameOver(obj) {
+            for (var i = 0; i < height; i++) {
+                for (var j = 0; j < width; j++) {
+                    var id = i + "_" + j;
+                    var cell = $("#" + id);
+                    if (cell.attr("isMine") == "true") {
+                        cell.children().text("d");
+                    }
+                    else {
+                        cell.children().text(cell.attr("numMines"));
+                    }
+                    cell.attr("visited", "true");
+                }
+            }
+        }
+        function updateBoardMines(obj) {
+            //number of mines is 5
+            var i = 0;
+            while(i<5) {
+                var row = Math.floor(Math.random() * 5);
+                var col = Math.floor(Math.random() * 5);
+                var id = row + "_" + col;
+                var cell = $("#" + id);
+                if (id != obj.attr("id") && cell.attr("isMine") == "false") {
+                    cell.attr("isMine", "true"); //sets the attribute isMine to 'true'
+
+                    //update the numMines of all surrounding elements
+                    var leftid = row + "_" + (col - 1);
+                    var leftCell = $("#" + leftid);
+                    if(leftCell.length > 0)
+                         leftCell.attr("numMines", parseInt(leftCell.attr("numMines")) + 1);
+
+                    var rightid = row + "_" + (col + 1);
+                    var rightCell = $("#" + rightid);
+                    if(rightCell.length > 0)
+                            rightCell.attr("numMines", parseInt(rightCell.attr("numMines")) + 1);
+
+                    var upid = (row - 1) + "_" + col;
+                    var upCell = $("#" + upid);
+                    if(upCell.length > 0)
+                            upCell.attr("numMines", parseInt(upCell.attr("numMines")) + 1);
+
+                    var downid = (row + 1) + "_" + col;
+                    var downCell = $("#" + downid);
+                    if(downCell.length > 0)
+                            downCell.attr("numMines", parseInt(downCell.attr("numMines")) + 1);
+
+                    i++;
+                }
+            }
+            
+        }
+        
+        
+
+    </script>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body onload="initialize()">
+    
+</body>
+</html>
