@@ -26,6 +26,7 @@
         var first_click = true;
         var width = 5;
         var height = 5;
+        var numVisited = 0;
         function initialize() {
             var startTop = 100;
             var startLeft = 100;
@@ -62,6 +63,12 @@
                 }
 
                 $(this).attr("visited", "true");
+                numVisited ++;
+                    if (numVisited>=(width*height-5)){
+                        //display a winning message
+                        gameOver($(this));
+                        alert("Congradulations! You have won the game!");
+                    }
                 
 
             });
@@ -89,21 +96,25 @@
                 if (leftCell.length > 0 && leftCell.attr("visited")=="false") {
                     (leftCell).children().text(leftCell.attr("numMines"));
                     leftCell.attr("visited", "true");
+                    numVisited++;
                     clickhelper(leftCell);
                 }
                 if (rightCell.length > 0 && rightCell.attr("visited") == "false") {
                     rightCell.children().text(rightCell.attr("numMines"));
                     rightCell.attr("visited", "true");
+                    numVisited++;
                     clickhelper(rightCell);
                 }
                 if (upCell.length > 0 && upCell.attr("visited") == "false") {
                     upCell.children().text(upCell.attr("numMines"));
                     upCell.attr("visited", "true");
+                    numVisited++;
                     clickhelper(upCell);
                 }
                 if (downCell.length > 0 &&  downCell.attr("visited") == "false") {
                     downCell.children().text(downCell.attr("numMines"));
                     downCell.attr("visited", "true");
+                    numVisited++;
                     clickhelper(downCell);
                 }
 
