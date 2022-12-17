@@ -70,7 +70,7 @@
         
 
         function clickhelper(obj) {
-            if (obj.attr("visited") == "true" || parseInt(obj.attr("numMines")) > 0) {
+            if (obj.attr("isMine") == "true" || parseInt(obj.attr("numMines")) > 0) {
                 return;
             }
             else {
@@ -86,22 +86,22 @@
                 var upCell = $("#" + upid);
                 var downid = (row + 1) + "_" + col;
                 var downCell = $("#" + downid);
-                if (leftCell.length > 0) {
+                if (leftCell.length > 0 && leftCell.attr("visited")=="false") {
                     (leftCell).children().text(leftCell.attr("numMines"));
                     leftCell.attr("visited", "true");
                     clickhelper(leftCell);
                 }
-                if (rightCell.length > 0) {
+                if (rightCell.length > 0 && rightCell.attr("visited") == "false") {
                     rightCell.children().text(rightCell.attr("numMines"));
                     rightCell.attr("visited", "true");
                     clickhelper(rightCell);
                 }
-                if (upCell.length > 0) {
+                if (upCell.length > 0 && upCell.attr("visited") == "false") {
                     upCell.children().text(upCell.attr("numMines"));
                     upCell.attr("visited", "true");
                     clickhelper(upCell);
                 }
-                if (downCell.length > 0) {
+                if (downCell.length > 0 &&  downCell.attr("visited") == "false") {
                     downCell.children().text(downCell.attr("numMines"));
                     downCell.attr("visited", "true");
                     clickhelper(downCell);
