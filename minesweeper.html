@@ -45,7 +45,7 @@
             }
 
             $("div").on("click", function () {
-                if($(this).attr("visited")==false){
+                if($(this).attr("visited")=="false"){
                 if (first_click) {
                     updateBoardMines($(this));
                     first_click = false;
@@ -132,7 +132,7 @@
                     else {
                         cell.children().text(cell.attr("numMines"));
                     }
-                    cell.attr("visited", "true");
+                  
                 }
             }
         }
