@@ -44,32 +44,37 @@
                 startLeft = 100;
             }
 
-            $("div").on("click", function () {
-                if($(this).attr("visited")=="false"){
-                if (first_click) {
-                    updateBoardMines($(this));
-                    first_click = false;
-                }
-                
-                    
-                    if ($(this).attr("isMine") == "true") {
-                        //display a losing message
-                        gameOver($(this));
-                        alert("You stepped on a mine and exploded");
-                    }
-                    else {
-                        //display numMines
-                        $(this).children().text($(this).attr("numMines"));
-                        clickhelper($(this));
-                }
+            $("div").on("mousedown", function (event) {
+                if (event.which==1){
+                    if($(this).attr("visited")=="false"){
+                        if (first_click) {
+                         updateBoardMines($(this));
+                         first_click = false;
+                      }
 
-                $(this).attr("visited", "true");
-                numVisited = $("div[visited='true']").length;
-                    if (numVisited>=(width*height-5)){
-                        //display a winning message
-                        gameOver($(this));
-                        alert("Congradulations! You have won the game!");
+
+                        if ($(this).attr("isMine") == "true") {
+                            //display a losing message
+                            gameOver($(this));
+                            alert("You stepped on a mine and exploded");
+                        }
+                        else {
+                            //display numMines
+                            $(this).children().text($(this).attr("numMines"));
+                            clickhelper($(this));
                     }
+
+                    $(this).attr("visited", "true");
+                    numVisited = $("div[visited='true']").length;
+                        if (numVisited>=(width*height-5)){
+                            //display a winning message
+                            gameOver($(this));
+                            alert("Congradulations! You have won the game!");
+                        }
+                    }
+               }
+                else if (event.which==3){
+                    
                 }
 
             });
@@ -120,6 +125,8 @@
             }
 
         }
+        
+  
 
         function gameOver(obj) {
             for (var i = 0; i < height; i++) {
