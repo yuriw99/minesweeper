@@ -80,7 +80,7 @@
                         }
                     }
                }
-                else if (event.which == 3) {
+                else if (event.which == 3 && $(this).attr("visited") == "false") {
                     if ($(this).attr("flag") == "off") { //if flag is off, than right click should turn it on
                         $(this).children().html("&#x2691;");
                         $(this).children().addClass("txtred");
