@@ -60,7 +60,9 @@
                         if ($(this).attr("isMine") == "true") {
                             //display a losing message
                             gameOver($(this));
-                            alert("You stepped on a mine and exploded");
+                            setTimeout(function () {
+                                alert("You stepped on a mine and exploded");
+                            }, 100);
                         }
                         else {
                             //display numMines
@@ -73,7 +75,8 @@
                         if (numVisited>=(width*height-5)){
                             //display a winning message
                             gameOver($(this));
-                            alert("Congradulations! You have won the game!");
+                          setTimeout(function(){  alert("Congradulations! You have won the game!");
+                                               }, 100);
                         }
                     }
                }
